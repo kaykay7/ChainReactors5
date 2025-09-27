@@ -6,13 +6,15 @@ Specialized agent for inventory optimization, stock management, and reorder poin
 from typing import Dict, List, Any, Optional
 from datetime import datetime, timedelta
 import json
+from .csv_data_source import CSVDataSource
 
 class InventoryAgent:
     """Specialized agent for inventory management and optimization."""
     
-    def __init__(self, agent_id: str = "inventory_agent", memory_manager=None):
+    def __init__(self, agent_id: str = "inventory_agent", memory_manager=None, csv_data_source=None):
         self.agent_id = agent_id
         self.memory_manager = memory_manager
+        self.csv_data_source = csv_data_source or CSVDataSource()
         self.capabilities = [
             "stock_level_analysis",
             "reorder_point_calculation", 
@@ -22,10 +24,18 @@ class InventoryAgent:
             "stockout_prediction"
         ]
     
-    def analyze_stock_levels(self, inventory_data: List[Dict]) -> Dict[str, Any]:
+    def analyze_stock_levels(self, inventory_data: List[Dict] = None) -> Dict[str, Any]:
         """Analyze current stock levels and identify issues."""
         # Get historical context from memory
         historical_context = self._get_historical_context()
+        
+        # If no inventory_data provided, try to get from CSV as supplementary source
+        csv_inventory_data = None
+        if inventory_data is None and self.csv_data_source:
+            csv_inventory_data = self.csv_data_source.get_inventory_data()
+        
+        # Use provided data or CSV data
+        working_data = inventory_data or csv_inventory_data or []
         
         analysis = {
             "low_stock_items": [],
@@ -33,20 +43,25 @@ class InventoryAgent:
             "overstocked_items": [],
             "critical_items": [],
             "recommendations": [],
-            "historical_insights": historical_context
+            "historical_insights": historical_context,
+            "data_sources": {
+                "primary": "provided" if inventory_data else "csv" if csv_inventory_data else "none",
+                "supplementary": "csv" if csv_inventory_data else "none"
+            }
         }
         
-        for item in inventory_data:
-            current_stock = item.get('current_stock', 0)
-            min_stock = item.get('min_stock', 0)
-            max_stock = item.get('max_stock', 0)
-            reorder_point = item.get('reorder_point', 0)
+        for item in working_data:
+            # Map CSV columns to expected fields (if from CSV) or use provided field names
+            current_stock = item.get('Current Stock', item.get('current_stock', 0))
+            min_stock = item.get('Min Stock', item.get('min_stock', 0))
+            max_stock = item.get('Max Stock', item.get('max_stock', 0))
+            reorder_point = item.get('Reorder Point', item.get('reorder_point', 0))
             
             # Low stock analysis
             if current_stock <= reorder_point:
                 analysis["low_stock_items"].append({
-                    "item_id": item.get('id'),
-                    "name": item.get('name'),
+                    "item_id": item.get('ID', item.get('id')),
+                    "name": item.get('Name', item.get('name')),
                     "current_stock": current_stock,
                     "reorder_point": reorder_point,
                     "urgency": "high" if current_stock <= min_stock else "medium"
@@ -55,16 +70,16 @@ class InventoryAgent:
             # Out of stock
             if current_stock == 0:
                 analysis["out_of_stock_items"].append({
-                    "item_id": item.get('id'),
-                    "name": item.get('name'),
+                    "item_id": item.get('ID', item.get('id')),
+                    "name": item.get('Name', item.get('name')),
                     "impact": "critical"
                 })
             
             # Overstocked items
             if current_stock > max_stock * 1.2:  # 20% over max
                 analysis["overstocked_items"].append({
-                    "item_id": item.get('id'),
-                    "name": item.get('name'),
+                    "item_id": item.get('ID', item.get('id')),
+                    "name": item.get('Name', item.get('name')),
                     "current_stock": current_stock,
                     "max_stock": max_stock,
                     "excess": current_stock - max_stock

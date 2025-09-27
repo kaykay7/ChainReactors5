@@ -6,12 +6,15 @@ Specialized agent for supplier evaluation, performance tracking, and procurement
 from typing import Dict, List, Any, Optional
 from datetime import datetime, timedelta
 import json
+from .csv_data_source import CSVDataSource
 
 class SupplierAgent:
     """Specialized agent for supplier management and optimization."""
     
-    def __init__(self, agent_id: str = "supplier_agent"):
+    def __init__(self, agent_id: str = "supplier_agent", memory_manager=None, csv_data_source=None):
         self.agent_id = agent_id
+        self.memory_manager = memory_manager
+        self.csv_data_source = csv_data_source or CSVDataSource()
         self.capabilities = [
             "supplier_performance_analysis",
             "risk_assessment",
@@ -21,18 +24,31 @@ class SupplierAgent:
             "quality_monitoring"
         ]
     
-    def analyze_supplier_performance(self, supplier_data: List[Dict]) -> Dict[str, Any]:
+    def analyze_supplier_performance(self, supplier_data: List[Dict] = None) -> Dict[str, Any]:
         """Analyze supplier performance across multiple metrics."""
-        performance_analysis = {}
+        # If no supplier_data provided, try to get from CSV as supplementary source
+        csv_supplier_data = None
+        if supplier_data is None and self.csv_data_source:
+            csv_supplier_data = self.csv_data_source.get_supplier_data()
         
-        for supplier in supplier_data:
-            supplier_id = supplier.get('id')
+        # Use provided data or CSV data
+        working_data = supplier_data or csv_supplier_data or []
+        
+        performance_analysis = {
+            "data_sources": {
+                "primary": "provided" if supplier_data else "csv" if csv_supplier_data else "none",
+                "supplementary": "csv" if csv_supplier_data else "none"
+            }
+        }
+        
+        for supplier in working_data:
+            supplier_id = supplier.get('ID', supplier.get('id'))
             
-            # Calculate performance scores
+            # Calculate performance scores using CSV column names or provided field names
             delivery_score = self._calculate_delivery_score(supplier)
             quality_score = self._calculate_quality_score(supplier)
             cost_score = self._calculate_cost_score(supplier)
-            reliability_score = supplier.get('reliability_score', 0)
+            reliability_score = supplier.get('Reliability Score', supplier.get('reliability_score', 0))
             
             # Overall performance score (weighted average)
             overall_score = (
@@ -43,7 +59,7 @@ class SupplierAgent:
             )
             
             performance_analysis[supplier_id] = {
-                "supplier_name": supplier.get('name'),
+                "supplier_name": supplier.get('Name', supplier.get('name')),
                 "overall_score": round(overall_score, 2),
                 "delivery_score": delivery_score,
                 "quality_score": quality_score,

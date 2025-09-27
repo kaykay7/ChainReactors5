@@ -7,12 +7,15 @@ from typing import Dict, List, Any, Optional
 from datetime import datetime, timedelta
 import json
 import statistics
+from .csv_data_source import CSVDataSource
 
 class ForecastingAgent:
     """Specialized agent for demand forecasting and trend analysis."""
     
-    def __init__(self, agent_id: str = "forecasting_agent"):
+    def __init__(self, agent_id: str = "forecasting_agent", memory_manager=None, csv_data_source=None):
         self.agent_id = agent_id
+        self.memory_manager = memory_manager
+        self.csv_data_source = csv_data_source or CSVDataSource()
         self.capabilities = [
             "demand_forecasting",
             "trend_analysis",

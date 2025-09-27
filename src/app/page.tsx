@@ -19,6 +19,7 @@ import useMediaQuery from "@/hooks/use-media-query";
 import ItemHeader from "@/components/canvas/ItemHeader";
 import NewItemMenu from "@/components/canvas/NewItemMenu";
 import SimpleLoadDataButton from "@/components/SimpleLoadDataButton";
+import Link from "next/link";
 
 export default function CopilotKitPage() {
   const { state, setState } = useCoAgent<AgentState>({
@@ -1391,6 +1392,11 @@ export default function CopilotKitPage() {
                     placeholder="Canvas description..."
                     className={cn(titleClasses, "mt-2 text-sm leading-6 resize-none overflow-hidden")}
                   />
+                  <div className="mt-4 flex items-center space-x-2">
+                    <Link href="/monitoring">
+                      <Button variant="outline" size="sm">📊 Monitoring</Button>
+                    </Link>
+                  </div>
                 </motion.div>
               )}
               
@@ -1763,6 +1769,3 @@ export default function CopilotKitPage() {
     </div>
   );
 }
-
-
-

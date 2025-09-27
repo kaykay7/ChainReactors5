@@ -13,6 +13,7 @@ from .inventory_agent import InventoryAgent
 from .forecasting_agent import ForecastingAgent
 from .supplier_agent import SupplierAgent
 from .memory_manager import AgentMemoryManager
+from .csv_data_source import CSVDataSource
 
 @dataclass
 class AgentMessage:
@@ -27,15 +28,18 @@ class AgentMessage:
 class AgentOrchestrator:
     """Orchestrates specialized agents and manages collaboration."""
     
-    def __init__(self, memory_dir: str = "./agent_memory"):
+    def __init__(self, memory_dir: str = "./agent_memory", csv_dir: str = "./mock_data"):
         # Initialize memory manager
         self.memory_manager = AgentMemoryManager(memory_dir)
         
-        # Initialize agents with memory manager
+        # Initialize CSV data source
+        self.csv_data_source = CSVDataSource(csv_dir)
+        
+        # Initialize agents with memory manager and CSV data source
         self.agents = {
-            "inventory_agent": InventoryAgent(memory_manager=self.memory_manager),
-            "forecasting_agent": ForecastingAgent(memory_manager=self.memory_manager),
-            "supplier_agent": SupplierAgent(memory_manager=self.memory_manager)
+            "inventory_agent": InventoryAgent(memory_manager=self.memory_manager, csv_data_source=self.csv_data_source),
+            "forecasting_agent": ForecastingAgent(memory_manager=self.memory_manager, csv_data_source=self.csv_data_source),
+            "supplier_agent": SupplierAgent(memory_manager=self.memory_manager, csv_data_source=self.csv_data_source)
         }
         self.message_queue = []
         self.conversation_context = {}
