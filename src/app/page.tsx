@@ -20,18 +20,107 @@ import ItemHeader from "@/components/canvas/ItemHeader";
 import NewItemMenu from "@/components/canvas/NewItemMenu";
 import SimpleLoadDataButton from "@/components/SimpleLoadDataButton";
 
+// Local storage helper functions
+const STORAGE_KEY = 'canvas-state';
+
+const saveToLocalStorage = (state: AgentState) => {
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      console.log('💾 Canvas state saved to localStorage');
+    }
+  } catch (error) {
+    console.warn('Failed to save to localStorage:', error);
+    // If storage is full, try to clear old data and retry
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      console.log('💾 Canvas state saved to localStorage (after clearing old data)');
+    } catch (retryError) {
+      console.warn('Failed to save to localStorage even after clearing:', retryError);
+    }
+  }
+};
+
+const loadFromLocalStorage = (): AgentState | null => {
+  try {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Validate the loaded data has the expected structure
+        if (parsed && typeof parsed === 'object' && Array.isArray(parsed.items)) {
+          console.log('🔄 Canvas state loaded from localStorage:', parsed.items.length, 'items');
+          return parsed as AgentState;
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to load from localStorage:', error);
+    // Clear corrupted data
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {}
+  }
+  return null;
+};
+
+const clearLocalStorage = () => {
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(STORAGE_KEY);
+      console.log('🗑️ Canvas state cleared from localStorage');
+    }
+  } catch (error) {
+    console.warn('Failed to clear localStorage:', error);
+  }
+};
+
 export default function CopilotKitPage() {
-  const { state, setState } = useCoAgent<AgentState>({
-    name: "sample_agent",
-    initialState,
+  // Load initial state from localStorage if available
+  const [initialStateWithStorage] = useState(() => {
+    const savedState = loadFromLocalStorage();
+    return savedState || initialState;
   });
+
+  const { state, setState: originalSetState } = useCoAgent<AgentState>({
+    name: "sample_agent",
+    initialState: initialStateWithStorage,
+  });
+
+  // Wrapper function that saves to localStorage after setting state
+  const setState = useCallback((updater: AgentState | ((prev: AgentState | undefined) => AgentState)) => {
+    if (typeof updater === 'function') {
+      // For function updaters, we need to wrap them to save to localStorage after the update
+      originalSetState((prev) => {
+        // React provides the actual previous state here
+        const newState = updater(prev); // Pass the previous state to the user's updater function
+        
+        // Save to localStorage after state is computed
+        if (newState && isNonEmptyAgentState(newState)) {
+          // Use setTimeout to avoid blocking the state update
+          setTimeout(() => saveToLocalStorage(newState), 0);
+        }
+        return newState;
+      });
+    } else {
+      // For direct state objects, just set and save
+      originalSetState(updater);
+      // Save to localStorage after state is updated
+      if (updater && isNonEmptyAgentState(updater)) {
+        setTimeout(() => saveToLocalStorage(updater), 0);
+      }
+    }
+  }, [originalSetState]);
   
 
   // Global cache for the last non-empty agent state
-  const cachedStateRef = useRef<AgentState>(state ?? initialState);
+  const cachedStateRef = useRef<AgentState>(state ?? initialStateWithStorage);
   useEffect(() => {
     if (isNonEmptyAgentState(state)) {
       cachedStateRef.current = state as AgentState;
+      // Save to localStorage whenever we have valid state
+      saveToLocalStorage(state as AgentState);
     }
   }, [state]);
   // we use viewState to avoid transient flicker; TODO: troubleshoot and remove this workaround
@@ -1110,7 +1199,7 @@ export default function CopilotKitPage() {
               console.log("Successfully synced existing items to new sheet");
               // Set the newly created sheet as the sync target and update title/description
               setState((prev) => ({ 
-                ...prev,
+                ...(prev ?? initialState),
                 globalTitle: result.title || title.trim(),
                 globalDescription: `Connected to Google Sheet: ${result.title || title.trim()}`,
                 syncSheetId: sheetId,
@@ -1304,6 +1393,17 @@ export default function CopilotKitPage() {
     },
   });
 
+  useCopilotAction({
+    name: "clearLocalStorage",
+    description: "Clear the locally stored canvas data from browser storage. This will reset the canvas to empty state on next refresh.",
+    available: "remote",
+    parameters: [],
+    handler: () => {
+      clearLocalStorage();
+      return "✅ Local storage cleared. The canvas will start fresh on the next page refresh.";
+    },
+  });
+
   const titleClasses = cn(
     /* base styles */
     "w-full outline-none rounded-md px-2 py-1",
@@ -1478,6 +1578,22 @@ export default function CopilotKitPage() {
                 }}
               >
                 📊 Sheets
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className={cn(
+                  "gap-1.25 text-base font-semibold rounded-none border-r-0",
+                )}
+                onClick={() => {
+                  if (confirm('Are you sure you want to clear all saved canvas data? This will reset the canvas on the next page refresh.')) {
+                    clearLocalStorage();
+                    alert('✅ Local storage cleared! Refresh the page to start with a clean canvas.');
+                  }
+                }}
+                title="Clear saved canvas data from browser storage"
+              >
+                🗑️ Clear
               </Button>
               <Button
                 type="button"
