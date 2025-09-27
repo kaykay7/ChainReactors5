@@ -94,6 +94,7 @@ export default function AmazonDashboard() {
       const data = await response.json();
       
       if (data.success) {
+        console.log('📦 Fetched orders from mock server:', data.data.orders);
         setOrders(prev => [...prev, ...data.data.orders]);
         setIsConnected(true);
         

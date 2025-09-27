@@ -6,6 +6,17 @@ from llama_index.llms.openai import OpenAI
 from llama_index.core.tools import FunctionTool
 from llama_index.protocols.ag_ui.router import get_ag_ui_workflow_router
 
+# Import product order agent
+from .product_order_agent import (
+    product_order_agent,
+    create_product_command,
+    create_order_command,
+    generate_orders_command,
+    get_products_command,
+    get_orders_command,
+    get_dashboard_data_command
+)
+
 # Load environment variables early to support local development via .env
 load_dotenv()
 
@@ -148,6 +159,55 @@ def calculate_total_cost_of_ownership() -> str:
         return "calculate_total_cost_of_ownership() - TCO analysis completed. Review cost breakdowns and optimization opportunities."
     except Exception as e:
         return f"Error calculating total cost of ownership: {str(e)}"
+
+# Product & Order Generation Tools
+def create_product(name: Annotated[str, "Product name to create."], 
+                  category: Annotated[Optional[str], "Product category."] = None,
+                  base_price: Annotated[Optional[float], "Base price for the product."] = None) -> str:
+    """Create a new product in the system."""
+    try:
+        return create_product_command(name, category, base_price)
+    except Exception as e:
+        return f"Error creating product: {str(e)}"
+
+def create_order(products: Annotated[Optional[List[str]], "List of product names for the order."] = None,
+                quantity: Annotated[Optional[int], "Order quantity."] = None,
+                priority: Annotated[Optional[str], "Order priority (low, medium, high, urgent, critical)."] = None,
+                supplier: Annotated[Optional[str], "Supplier name."] = None) -> str:
+    """Create a new order in the system."""
+    try:
+        return create_order_command(products, quantity, priority, supplier)
+    except Exception as e:
+        return f"Error creating order: {str(e)}"
+
+def generate_orders(count: Annotated[int, "Number of orders to generate."] = 5,
+                   order_type: Annotated[str, "Type of orders to generate (mixed, urgent, bulk, premium)."] = "mixed") -> str:
+    """Generate multiple orders for testing and demonstration."""
+    try:
+        return generate_orders_command(count, order_type)
+    except Exception as e:
+        return f"Error generating orders: {str(e)}"
+
+def get_products() -> str:
+    """Get all products in the system."""
+    try:
+        return get_products_command()
+    except Exception as e:
+        return f"Error getting products: {str(e)}"
+
+def get_orders() -> str:
+    """Get all orders in the system."""
+    try:
+        return get_orders_command()
+    except Exception as e:
+        return f"Error getting orders: {str(e)}"
+
+def get_dashboard_data() -> str:
+    """Get dashboard data including metrics and recent orders."""
+    try:
+        return get_dashboard_data_command()
+    except Exception as e:
+        return f"Error getting dashboard data: {str(e)}"
 
 
 
@@ -516,6 +576,43 @@ _tco_calculation_tool = FunctionTool.from_defaults(
     description="Calculate total cost of ownership for suppliers and products including hidden costs."
 )
 
+# Product & Order Generation Tools
+_create_product_tool = FunctionTool.from_defaults(
+    fn=create_product,
+    name="create_product",
+    description="Create a new product in the system."
+)
+
+_create_order_tool = FunctionTool.from_defaults(
+    fn=create_order,
+    name="create_order", 
+    description="Create a new order in the system."
+)
+
+_generate_orders_tool = FunctionTool.from_defaults(
+    fn=generate_orders,
+    name="generate_orders",
+    description="Generate multiple orders for testing and demonstration."
+)
+
+_get_products_tool = FunctionTool.from_defaults(
+    fn=get_products,
+    name="get_products",
+    description="Get all products in the system."
+)
+
+_get_orders_tool = FunctionTool.from_defaults(
+    fn=get_orders,
+    name="get_orders",
+    description="Get all orders in the system."
+)
+
+_get_dashboard_data_tool = FunctionTool.from_defaults(
+    fn=get_dashboard_data,
+    name="get_dashboard_data",
+    description="Get dashboard data including metrics and recent orders."
+)
+
 _backend_tools = _load_composio_tools()
 _backend_tools.extend([
     _sheet_list_tool,
@@ -528,7 +625,13 @@ _backend_tools.extend([
     _procurement_recommendations_tool,
     _compliance_monitoring_tool,
     _warehouse_optimization_tool,
-    _tco_calculation_tool
+    _tco_calculation_tool,
+    _create_product_tool,
+    _create_order_tool,
+    _generate_orders_tool,
+    _get_products_tool,
+    _get_orders_tool,
+    _get_dashboard_data_tool
 ])
 print(f"Backend tools loaded: {len(_backend_tools)} tools")
 
