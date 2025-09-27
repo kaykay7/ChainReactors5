@@ -1,4 +1,4 @@
-import { ChartData, ProjectData } from "@/lib/canvas/types";
+import { ChartData, OrderData, ProjectData } from "@/lib/canvas/types";
 
 export function projectAddField4Item(data: ProjectData, text?: string): { next: ProjectData; createdId: string } {
   const existing = data.field4 ?? [];
@@ -64,6 +64,29 @@ export function chartRemoveField1Metric(data: ChartData, index: number): ChartDa
     return { ...data, field1: next } as ChartData;
   }
   return data;
+}
+
+export function orderAddField8LineItem(data: OrderData, productId?: string, quantity?: number): { next: OrderData; createdId: string } {
+  const existing = data.field8 ?? [];
+  const nextCount = (data.field8_id ?? 0) + 1;
+  const id = String(nextCount).padStart(3, "0");
+  const next = [...existing, { id, productId: productId ?? "", quantity: quantity ?? 1 }];
+  return { next: { ...data, field8: next, field8_id: nextCount }, createdId: id };
+}
+
+export function orderSetField8LineItemProductId(data: OrderData, lineItemId: string, productId: string): OrderData {
+  const next = (data.field8 ?? []).map((item) => (item.id === lineItemId ? { ...item, productId } : item));
+  return { ...data, field8: next } as OrderData;
+}
+
+export function orderSetField8LineItemQuantity(data: OrderData, lineItemId: string, quantity: number): OrderData {
+  const next = (data.field8 ?? []).map((item) => (item.id === lineItemId ? { ...item, quantity } : item));
+  return { ...data, field8: next } as OrderData;
+}
+
+export function orderRemoveField8LineItem(data: OrderData, lineItemId: string): OrderData {
+  const next = (data.field8 ?? []).filter((item) => item.id !== lineItemId);
+  return { ...data, field8: next } as OrderData;
 }
 
 

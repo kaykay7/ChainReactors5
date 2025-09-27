@@ -1627,6 +1627,10 @@ export default function CopilotKitPage() {
                     title: "Add Inventory",
                     message: "Create a new inventory record.",
                   },
+                  {
+                    title: "Add Order",
+                    message: "Create a new order.",
+                  },
                 ]}
               />
             )}
@@ -1819,6 +1823,10 @@ export default function CopilotKitPage() {
               {
                 title: "Add Inventory",
                 message: "Create a new inventory record.",
+              },
+              {
+                title: "Add Order",
+                message: "Create a new order.",
               },
             ]}
           />

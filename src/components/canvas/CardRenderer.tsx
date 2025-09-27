@@ -5,7 +5,7 @@ import { X, Plus } from "lucide-react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Progress } from "@/components/ui/progress";
 import type { ChartData, EntityData, Item, ItemData, NoteData, ProjectData, SupplierData, InventoryData, OrderData, LogisticsData } from "@/lib/canvas/types";
-import { chartAddField1Metric, chartRemoveField1Metric, chartSetField1Label, chartSetField1Value, projectAddField4Item, projectRemoveField4Item, projectSetField4ItemDone, projectSetField4ItemText } from "@/lib/canvas/updates";
+import { chartAddField1Metric, chartRemoveField1Metric, chartSetField1Label, chartSetField1Value, orderAddField8LineItem, orderRemoveField8LineItem, orderSetField8LineItemProductId, orderSetField8LineItemQuantity, projectAddField4Item, projectRemoveField4Item, projectSetField4ItemDone, projectSetField4ItemText } from "@/lib/canvas/updates";
 
 export function CardRenderer(props: {
   item: Item;
@@ -434,6 +434,53 @@ export function CardRenderer(props: {
                 <option key={opt} value={opt}>{opt}</option>
               ))}
             </select>
+          </div>
+        </div>
+        <div className="mt-4">
+          <div className="mb-2 flex items-center justify-between">
+            <label className="block text-xs font-medium text-gray-500">Order Line Items</label>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
+              onClick={() => onUpdateData((prev) => orderAddField8LineItem(prev as OrderData, "", 1).next)}
+            >
+              <Plus className="size-3.5" />
+              Add item
+            </button>
+          </div>
+          <div className="space-y-2">
+            {(!d.field8 || d.field8.length === 0) && (
+              <div className="grid place-items-center py-1.75 text-xs text-primary/50 font-medium text-pretty">
+                No items added yet. Add a line item to get started.
+              </div>
+            )}
+            {(d.field8 ?? []).map((lineItem, i) => (
+              <div key={lineItem.id} className="flex items-center gap-3">
+                <span className="text-xs font-mono text-muted-foreground/80">{String(lineItem.id ?? String(i + 1)).padStart(3, "0")}</span>
+                <input
+                  value={lineItem.productId}
+                  placeholder="Product ID"
+                  onChange={(e) => onUpdateData((prev) => orderSetField8LineItemProductId(prev as OrderData, lineItem.id, e.target.value))}
+                  className="flex-1 rounded-md border px-2 py-1 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+                />
+                <input
+                  type="number"
+                  min="1"
+                  value={lineItem.quantity}
+                  placeholder="Qty"
+                  onChange={(e) => onUpdateData((prev) => orderSetField8LineItemQuantity(prev as OrderData, lineItem.id, Number(e.target.value) || 1))}
+                  className="w-16 rounded-md border px-2 py-1 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+                />
+                <button
+                  type="button"
+                  aria-label="Delete line item"
+                  className="text-gray-400 hover:text-accent"
+                  onClick={() => onUpdateData((prev) => orderRemoveField8LineItem(prev as OrderData, lineItem.id))}
+                >
+                  <X className="h-5 w-5 md:h-6 md:w-6" />
+                </button>
+              </div>
+            ))}
           </div>
         </div>
         <div className="mt-3">

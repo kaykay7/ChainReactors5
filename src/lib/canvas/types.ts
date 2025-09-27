@@ -65,6 +65,12 @@ export interface InventoryData {
   field12: string; // status (in stock, low stock, out of stock)
 }
 
+export interface OrderLineItem {
+  id: string;
+  productId: string;
+  quantity: number;
+}
+
 export interface OrderData {
   field1: string; // order number
   field2: string; // supplier
@@ -73,7 +79,8 @@ export interface OrderData {
   field5: string; // status (pending, confirmed, shipped, delivered, cancelled)
   field6: number; // total amount
   field7: string; // currency
-  field8: string[]; // items ordered
+  field8: OrderLineItem[]; // order line items
+  field8_id: number; // id counter for line items
   field9: string; // priority (low, medium, high, urgent)
   field10: string; // notes/special instructions
 }
