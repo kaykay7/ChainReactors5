@@ -44,16 +44,10 @@ export interface ChartData {
 
 // Supply Chain Data Interfaces
 export interface SupplierData {
-  field1: string; // company name
-  field2: string; // category (raw materials, components, services)
-  field3: string; // location/region
-  field4: string[]; // certifications (ISO, FDA, etc.)
-  field5: number; // reliability score (0-100)
-  field6: string; // contact info
-  field7: string[]; // products/services offered
-  field8: number; // average delivery time (days)
-  field9: string; // payment terms
-  field10: string; // risk level (low, medium, high)
+  field1: string; // name
+  field2: string; // category
+  field3: number; // rating (1-5)
+  field4: string; // lastRatedDate (YYYY-MM-DD format)
 }
 
 export interface InventoryData {
