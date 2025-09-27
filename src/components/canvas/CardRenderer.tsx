@@ -11,8 +11,9 @@ export function CardRenderer(props: {
   item: Item;
   onUpdateData: (updater: (prev: ItemData) => ItemData) => void;
   onToggleTag: (tag: string) => void;
+  inventoryItems?: Item[];
 }) {
-  const { item, onUpdateData, onToggleTag } = props;
+  const { item, onUpdateData, onToggleTag, inventoryItems } = props;
 
   if (item.type === "note") {
     const d = item.data as NoteData;
@@ -454,33 +455,44 @@ export function CardRenderer(props: {
                 No items added yet. Add a line item to get started.
               </div>
             )}
-            {(d.field8 ?? []).map((lineItem, i) => (
-              <div key={lineItem.id} className="flex items-center gap-3">
-                <span className="text-xs font-mono text-muted-foreground/80">{String(lineItem.id ?? String(i + 1)).padStart(3, "0")}</span>
-                <input
-                  value={lineItem.productId}
-                  placeholder="Product ID"
-                  onChange={(e) => onUpdateData((prev) => orderSetField8LineItemProductId(prev as OrderData, lineItem.id, e.target.value))}
-                  className="flex-1 rounded-md border px-2 py-1 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
-                />
-                <input
-                  type="number"
-                  min="1"
-                  value={lineItem.quantity}
-                  placeholder="Qty"
-                  onChange={(e) => onUpdateData((prev) => orderSetField8LineItemQuantity(prev as OrderData, lineItem.id, Number(e.target.value) || 1))}
-                  className="w-16 rounded-md border px-2 py-1 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
-                />
-                <button
-                  type="button"
-                  aria-label="Delete line item"
-                  className="text-gray-400 hover:text-accent"
-                  onClick={() => onUpdateData((prev) => orderRemoveField8LineItem(prev as OrderData, lineItem.id))}
-                >
-                  <X className="h-5 w-5 md:h-6 md:w-6" />
-                </button>
-              </div>
-            ))}
+            {(d.field8 ?? []).map((lineItem, i) => {
+              const inventoryProducts = (inventoryItems ?? [])
+                .filter(item => item.type === "inventory")
+                .map(item => (item.data as InventoryData).field1)
+                .filter(name => name && name.trim() !== "");
+              
+              return (
+                <div key={lineItem.id} className="flex items-center gap-3">
+                  <span className="text-xs font-mono text-muted-foreground/80">{String(lineItem.id ?? String(i + 1)).padStart(3, "0")}</span>
+                  <select
+                    value={lineItem.productId}
+                    onChange={(e) => onUpdateData((prev) => orderSetField8LineItemProductId(prev as OrderData, lineItem.id, e.target.value))}
+                    className="flex-1 rounded-md border px-2 py-1 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:bg-accent/10 focus:text-accent"
+                  >
+                    <option value="">Select product...</option>
+                    {inventoryProducts.map((productName, idx) => (
+                      <option key={idx} value={productName}>{productName}</option>
+                    ))}
+                  </select>
+                  <input
+                    type="number"
+                    min="1"
+                    value={lineItem.quantity}
+                    placeholder="Qty"
+                    onChange={(e) => onUpdateData((prev) => orderSetField8LineItemQuantity(prev as OrderData, lineItem.id, Number(e.target.value) || 1))}
+                    className="w-16 rounded-md border px-2 py-1 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+                  />
+                  <button
+                    type="button"
+                    aria-label="Delete line item"
+                    className="text-gray-400 hover:text-accent"
+                    onClick={() => onUpdateData((prev) => orderRemoveField8LineItem(prev as OrderData, lineItem.id))}
+                  >
+                    <X className="h-5 w-5 md:h-6 md:w-6" />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
         <div className="mt-3">

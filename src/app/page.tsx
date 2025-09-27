@@ -1718,7 +1718,7 @@ export default function CopilotKitPage() {
                             />
 
                             <div className="mt-6">
-                              <CardRenderer item={item} onUpdateData={(updater) => updateItemData(item.id, updater)} onToggleTag={(tag) => toggleTag(item.id, tag)} />
+                              <CardRenderer item={item} onUpdateData={(updater) => updateItemData(item.id, updater)} onToggleTag={(tag) => toggleTag(item.id, tag)} inventoryItems={viewState.items} />
                             </div>
                           </article>
                         ))}
