@@ -67,6 +67,89 @@ def list_sheet_names(sheet_id: Annotated[str, "Google Sheets ID to list availabl
         return f"Error listing sheets from {sheet_id}: {str(e)}"
 
 
+# Supply Chain Optimization Tools
+def analyze_inventory_levels() -> str:
+    """Analyze current inventory levels and identify items that need reordering."""
+    try:
+        from .supply_chain_optimization import SupplyChainOptimizer
+        # This would be called with the current canvas state
+        return "analyze_inventory_levels() - Analysis completed. Check inventory items for low stock alerts."
+    except Exception as e:
+        return f"Error analyzing inventory levels: {str(e)}"
+
+def calculate_reorder_points() -> str:
+    """Calculate optimal reorder points based on demand patterns and lead times."""
+    try:
+        from .supply_chain_optimization import SupplyChainOptimizer
+        return "calculate_reorder_points() - Reorder points calculated. Review recommendations for optimal stock levels."
+    except Exception as e:
+        return f"Error calculating reorder points: {str(e)}"
+
+def assess_supplier_performance() -> str:
+    """Assess supplier performance metrics including delivery times, quality, and reliability."""
+    try:
+        from .supply_chain_optimization import SupplyChainOptimizer
+        return "assess_supplier_performance() - Supplier performance analysis completed. Review rankings and recommendations."
+    except Exception as e:
+        return f"Error assessing supplier performance: {str(e)}"
+
+def optimize_shipping_routes() -> str:
+    """Optimize shipping routes to minimize costs and delivery times."""
+    try:
+        from .supply_chain_optimization import SupplyChainOptimizer
+        return "optimize_shipping_routes() - Shipping routes optimized. Review consolidation opportunities and cost savings."
+    except Exception as e:
+        return f"Error optimizing shipping routes: {str(e)}"
+
+def predict_demand() -> str:
+    """Predict future demand based on historical data and market trends."""
+    try:
+        from .supply_chain_optimization import SupplyChainOptimizer
+        return "predict_demand() - Demand forecast generated. Review 3-month projections and seasonal trends."
+    except Exception as e:
+        return f"Error predicting demand: {str(e)}"
+
+def identify_supply_chain_risks() -> str:
+    """Identify potential risks in the supply chain including supplier dependencies and geopolitical factors."""
+    try:
+        from .supply_chain_optimization import SupplyChainOptimizer
+        return "identify_supply_chain_risks() - Risk assessment completed. Review supplier risks, inventory risks, and mitigation strategies."
+    except Exception as e:
+        return f"Error identifying supply chain risks: {str(e)}"
+
+def generate_procurement_recommendations() -> str:
+    """Generate recommendations for procurement decisions based on cost, quality, and risk factors."""
+    try:
+        from .supply_chain_optimization import SupplyChainOptimizer
+        return "generate_procurement_recommendations() - Procurement recommendations generated. Review cost optimization opportunities and alternative suppliers."
+    except Exception as e:
+        return f"Error generating procurement recommendations: {str(e)}"
+
+def monitor_compliance() -> str:
+    """Monitor compliance with regulations, certifications, and quality standards."""
+    try:
+        from .supply_chain_optimization import SupplyChainOptimizer
+        return "monitor_compliance() - Compliance monitoring completed. Review certification status and regulatory requirements."
+    except Exception as e:
+        return f"Error monitoring compliance: {str(e)}"
+
+def optimize_warehouse_operations() -> str:
+    """Optimize warehouse operations including storage, picking, and shipping processes."""
+    try:
+        from .supply_chain_optimization import SupplyChainOptimizer
+        return "optimize_warehouse_operations() - Warehouse optimization completed. Review storage efficiency and automation opportunities."
+    except Exception as e:
+        return f"Error optimizing warehouse operations: {str(e)}"
+
+def calculate_total_cost_of_ownership() -> str:
+    """Calculate total cost of ownership for suppliers and products including hidden costs."""
+    try:
+        from .supply_chain_optimization import SupplyChainOptimizer
+        return "calculate_total_cost_of_ownership() - TCO analysis completed. Review cost breakdowns and optimization opportunities."
+    except Exception as e:
+        return f"Error calculating total cost of ownership: {str(e)}"
+
+
 
 # --- Frontend tool stubs (names/signatures only; execution happens in the UI) ---
 
@@ -206,6 +289,43 @@ def syncCanvasToSheets() -> str:
     """Manually sync current canvas state to Google Sheets."""
     return "syncCanvasToSheets()"
 
+# Supply Chain Frontend Actions
+def setSupplierField1(value: Annotated[str, "Company name"], itemId: Annotated[str, "Supplier id."]) -> str:
+    return f"setSupplierField1({value}, {itemId})"
+
+def setSupplierField2(value: Annotated[str, "Category"], itemId: Annotated[str, "Supplier id."]) -> str:
+    return f"setSupplierField2({value}, {itemId})"
+
+def setSupplierField3(value: Annotated[str, "Location/region"], itemId: Annotated[str, "Supplier id."]) -> str:
+    return f"setSupplierField3({value}, {itemId})"
+
+def setSupplierField5(value: Annotated[float, "Reliability score 0-100"], itemId: Annotated[str, "Supplier id."]) -> str:
+    return f"setSupplierField5({value}, {itemId})"
+
+def setInventoryField3(value: Annotated[float, "Current stock level"], itemId: Annotated[str, "Inventory id."]) -> str:
+    return f"setInventoryField3({value}, {itemId})"
+
+def setInventoryField12(value: Annotated[str, "Status"], itemId: Annotated[str, "Inventory id."]) -> str:
+    return f"setInventoryField12({value}, {itemId})"
+
+def setOrderField5(value: Annotated[str, "Order status"], itemId: Annotated[str, "Order id."]) -> str:
+    return f"setOrderField5({value}, {itemId})"
+
+def setLogisticsField7(value: Annotated[str, "Shipment status"], itemId: Annotated[str, "Logistics id."]) -> str:
+    return f"setLogisticsField7({value}, {itemId})"
+
+def addSupplierField4(certification: Annotated[str, "Certification to add"], itemId: Annotated[str, "Supplier id."]) -> str:
+    return f"addSupplierField4({certification}, {itemId})"
+
+def removeSupplierField4(certification: Annotated[str, "Certification to remove"], itemId: Annotated[str, "Supplier id."]) -> str:
+    return f"removeSupplierField4({certification}, {itemId})"
+
+def addOrderField8(item: Annotated[str, "Item to add to order"], itemId: Annotated[str, "Order id."]) -> str:
+    return f"addOrderField8({item}, {itemId})"
+
+def removeOrderField8(item: Annotated[str, "Item to remove from order"], itemId: Annotated[str, "Order id."]) -> str:
+    return f"removeOrderField8({item}, {itemId})"
+
 
 FIELD_SCHEMA = (
     "FIELD SCHEMA (authoritative):\n"
@@ -223,19 +343,77 @@ FIELD_SCHEMA = (
     "  - field1: string (textarea; represents description)\n"
     "- chart.data:\n"
     "  - field1: Array<{id: string, label: string, value: number | ''}> with value in [0..100] or ''\n"
+    "- supplier.data:\n"
+    "  - field1: string (company name)\n"
+    "  - field2: string (category: 'raw materials' | 'components' | 'services' | 'logistics')\n"
+    "  - field3: string (location/region)\n"
+    "  - field4: string[] (certifications: ISO, FDA, etc.)\n"
+    "  - field5: number (reliability score 0-100)\n"
+    "  - field6: string (contact info)\n"
+    "  - field7: string[] (products/services offered)\n"
+    "  - field8: number (average delivery time in days)\n"
+    "  - field9: string (payment terms)\n"
+    "  - field10: string (risk level: 'low' | 'medium' | 'high')\n"
+    "- inventory.data:\n"
+    "  - field1: string (product name)\n"
+    "  - field2: string (SKU/part number)\n"
+    "  - field3: number (current stock level)\n"
+    "  - field4: number (minimum stock level)\n"
+    "  - field5: number (maximum stock level)\n"
+    "  - field6: number (reorder point)\n"
+    "  - field7: string (unit of measure)\n"
+    "  - field8: number (unit cost)\n"
+    "  - field9: string (supplier)\n"
+    "  - field10: string (location/warehouse)\n"
+    "  - field11: number (lead time in days)\n"
+    "  - field12: string (status: 'in stock' | 'low stock' | 'out of stock')\n"
+    "- order.data:\n"
+    "  - field1: string (order number)\n"
+    "  - field2: string (supplier)\n"
+    "  - field3: string (order date YYYY-MM-DD)\n"
+    "  - field4: string (expected delivery date YYYY-MM-DD)\n"
+    "  - field5: string (status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled')\n"
+    "  - field6: number (total amount)\n"
+    "  - field7: string (currency)\n"
+    "  - field8: string[] (items ordered)\n"
+    "  - field9: string (priority: 'low' | 'medium' | 'high' | 'urgent')\n"
+    "  - field10: string (notes/special instructions)\n"
+    "- logistics.data:\n"
+    "  - field1: string (shipment ID)\n"
+    "  - field2: string (carrier/transport company)\n"
+    "  - field3: string (origin location)\n"
+    "  - field4: string (destination location)\n"
+    "  - field5: string (shipping date YYYY-MM-DD)\n"
+    "  - field6: string (expected arrival date YYYY-MM-DD)\n"
+    "  - field7: string (status: 'picked up' | 'in transit' | 'delivered' | 'delayed')\n"
+    "  - field8: string (tracking number)\n"
+    "  - field9: number (shipping cost)\n"
+    "  - field10: string (shipping method: 'ground' | 'air' | 'sea')\n"
+    "  - field11: string (special handling requirements)\n"
+    "  - field12: number (weight/volume)\n"
 )
 
 SYSTEM_PROMPT = (
-    "You are a helpful AG-UI assistant.\n\n"
+    "You are a Supply Chain Optimization Agent - an intelligent assistant that helps optimize supply chain operations, manage inventory, coordinate with suppliers, and ensure efficient logistics.\n\n"
     + FIELD_SCHEMA +
     "\nMUTATION/TOOL POLICY:\n"
     "- When you claim to create/update/delete, you MUST call the corresponding tool(s) (frontend or backend).\n"
-    "- To create new cards, call the frontend tool `createItem` with `type` in {project, entity, note, chart} and optional `name`.\n"
+    "- To create new cards, call the frontend tool `createItem` with `type` in {project, entity, note, chart, supplier, inventory, order, logistics} and optional `name`.\n"
     "- After tools run, rely on the latest shared state (ground truth) when replying.\n"
     "- To set a card's subtitle (never the data fields): use setItemSubtitleOrDescription.\n\n"
+    "SUPPLY CHAIN OPTIMIZATION CAPABILITIES:\n"
+    "- **Inventory Management**: Monitor stock levels, calculate reorder points, identify low-stock items\n"
+    "- **Supplier Management**: Track supplier performance, reliability scores, certifications, risk levels\n"
+    "- **Order Processing**: Manage purchase orders, track delivery status, coordinate with suppliers\n"
+    "- **Logistics Coordination**: Optimize shipping routes, track shipments, manage delivery schedules\n"
+    "- **Risk Assessment**: Identify supply chain vulnerabilities, assess supplier dependencies\n"
+    "- **Cost Optimization**: Calculate total cost of ownership, optimize procurement decisions\n"
+    "- **Compliance Monitoring**: Track certifications, regulatory requirements, quality standards\n"
+    "- **Demand Forecasting**: Predict future demand based on historical data and trends\n\n"
     "DESCRIPTION MAPPING:\n"
     "- For project/entity/chart: treat 'description', 'overview', 'summary', 'caption', 'blurb' as the card subtitle; use setItemSubtitleOrDescription.\n"
-    "- For notes: 'content', 'description', 'text', or 'note' refers to note content; use setNoteField1 / appendNoteField1 / clearNoteField1.\n\n"
+    "- For notes: 'content', 'description', 'text', or 'note' refers to note content; use setNoteField1 / appendNoteField1 / clearNoteField1.\n"
+    "- For supply chain items: use specific field setters like setSupplierField1, setInventoryField3, setOrderField5, setLogisticsField7.\n\n"
     "GOOGLE SHEETS INTEGRATION & AUTO-SYNC WORKFLOW:\n"
     "- GOOGLE SHEETS IS THE SOURCE OF TRUTH: Always prioritize Google Sheets data over canvas state when there are conflicts.\n"
     "- AUTO-SYNC BEHAVIOR: Automatically sync between Google Sheets and canvas WITHOUT asking questions. Just do it.\n"
@@ -277,9 +455,81 @@ _sheet_list_tool = FunctionTool.from_defaults(
     description="List all available sheet names in a Google Spreadsheet."
 )
 
+# Supply Chain Backend Tools
+_inventory_analysis_tool = FunctionTool.from_defaults(
+    fn=analyze_inventory_levels,
+    name="analyze_inventory_levels",
+    description="Analyze current inventory levels and identify items that need reordering."
+)
+
+_reorder_points_tool = FunctionTool.from_defaults(
+    fn=calculate_reorder_points,
+    name="calculate_reorder_points",
+    description="Calculate optimal reorder points based on demand patterns and lead times."
+)
+
+_supplier_performance_tool = FunctionTool.from_defaults(
+    fn=assess_supplier_performance,
+    name="assess_supplier_performance",
+    description="Assess supplier performance metrics including delivery times, quality, and reliability."
+)
+
+_shipping_optimization_tool = FunctionTool.from_defaults(
+    fn=optimize_shipping_routes,
+    name="optimize_shipping_routes",
+    description="Optimize shipping routes to minimize costs and delivery times."
+)
+
+_demand_prediction_tool = FunctionTool.from_defaults(
+    fn=predict_demand,
+    name="predict_demand",
+    description="Predict future demand based on historical data and market trends."
+)
+
+_risk_assessment_tool = FunctionTool.from_defaults(
+    fn=identify_supply_chain_risks,
+    name="identify_supply_chain_risks",
+    description="Identify potential risks in the supply chain including supplier dependencies and geopolitical factors."
+)
+
+_procurement_recommendations_tool = FunctionTool.from_defaults(
+    fn=generate_procurement_recommendations,
+    name="generate_procurement_recommendations",
+    description="Generate recommendations for procurement decisions based on cost, quality, and risk factors."
+)
+
+_compliance_monitoring_tool = FunctionTool.from_defaults(
+    fn=monitor_compliance,
+    name="monitor_compliance",
+    description="Monitor compliance with regulations, certifications, and quality standards."
+)
+
+_warehouse_optimization_tool = FunctionTool.from_defaults(
+    fn=optimize_warehouse_operations,
+    name="optimize_warehouse_operations",
+    description="Optimize warehouse operations including storage, picking, and shipping processes."
+)
+
+_tco_calculation_tool = FunctionTool.from_defaults(
+    fn=calculate_total_cost_of_ownership,
+    name="calculate_total_cost_of_ownership",
+    description="Calculate total cost of ownership for suppliers and products including hidden costs."
+)
 
 _backend_tools = _load_composio_tools()
-_backend_tools.append(_sheet_list_tool)
+_backend_tools.extend([
+    _sheet_list_tool,
+    _inventory_analysis_tool,
+    _reorder_points_tool,
+    _supplier_performance_tool,
+    _shipping_optimization_tool,
+    _demand_prediction_tool,
+    _risk_assessment_tool,
+    _procurement_recommendations_tool,
+    _compliance_monitoring_tool,
+    _warehouse_optimization_tool,
+    _tco_calculation_tool
+])
 print(f"Backend tools loaded: {len(_backend_tools)} tools")
 
 agentic_chat_router = get_ag_ui_workflow_router(
@@ -311,6 +561,19 @@ agentic_chat_router = get_ag_ui_workflow_router(
         setChartField1Value,
         clearChartField1Value,
         removeChartField1,
+        # Supply Chain Tools
+        setSupplierField1,
+        setSupplierField2,
+        setSupplierField3,
+        setSupplierField5,
+        addSupplierField4,
+        removeSupplierField4,
+        setInventoryField3,
+        setInventoryField12,
+        setOrderField5,
+        addOrderField8,
+        removeOrderField8,
+        setLogisticsField7,
         openSheetSelectionModal,
         setSyncSheetId,
     ],

@@ -1,0 +1,4 @@
+ID,Name,Subtitle,Order Number,Supplier,Order Date,Expected Delivery,Status,Total Amount,Currency,Items Ordered,Priority,Notes
+0001,PO-2024-001,Urgent component order,PO-2024-001,TechCorp Solutions,2024-01-15,2024-01-22,confirmed,12500.00,USD,"Product A; Product B",urgent,Express delivery required
+0002,PO-2024-002,Standard order,PO-2024-002,Global Parts Inc,2024-01-10,2024-01-24,shipped,8500.00,USD,Product B,medium,Standard delivery
+0003,PO-2024-003,Budget order,PO-2024-003,Budget Suppliers Ltd,2024-01-05,2024-01-26,delivered,3200.00,USD,Product C,low,No special requirements

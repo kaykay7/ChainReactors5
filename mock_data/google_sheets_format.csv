@@ -1,0 +1,13 @@
+ID,Type,Name,Subtitle,Company Name,Category,Location,Reliability Score,Contact Info,Products,Delivery Time,Payment Terms,Risk Level,Product Name,SKU,Current Stock,Min Stock,Max Stock,Unit Cost,Supplier,Lead Time,Status,Order Number,Supplier Name,Order Date,Expected Delivery,Order Status,Total Amount,Currency,Priority,Notes,Shipment ID,Carrier,Origin,Destination,Shipping Date,Expected Arrival,Shipment Status,Tracking Number,Shipping Cost,Shipping Method,Special Requirements
+0001,supplier,TechCorp Solutions,Leading electronics supplier,TechCorp Solutions,components,North America,95,contact@techcorp.com,"Microprocessors; Memory chips; Circuit boards",7,Net 30,low,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+0002,supplier,Global Parts Inc,International component supplier,Global Parts Inc,raw materials,Asia Pacific,78,info@globalparts.com,"Steel; Aluminum; Plastics",14,Net 45,medium,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+0003,supplier,Budget Suppliers Ltd,Cost-effective supplier,Budget Suppliers Ltd,components,Europe,45,sales@budgetsuppliers.com,"Basic components; Generic parts",21,Net 60,high,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+0004,inventory,Product A,High-demand electronics,,,,,,,,,,,,Product A,ELEC-001,150,50,200,25.99,TechCorp Solutions,7,in stock,,,,,,,,,,,,,,,,,,,,,
+0005,inventory,Product B,Standard component,,,,,,,,,,,,Product B,COMP-002,25,30,100,15.50,Global Parts Inc,14,low stock,,,,,,,,,,,,,,,,,,,,,
+0006,inventory,Product C,Trending product,,,,,,,,,,,,Product C,TREND-003,0,20,80,45.00,Budget Suppliers Ltd,21,out of stock,,,,,,,,,,,,,,,,,,,,,
+0007,order,PO-2024-001,Urgent component order,,,,,,,,,,,,,,,,,,,,PO-2024-001,TechCorp Solutions,2024-01-15,2024-01-22,confirmed,12500.00,USD,urgent,Express delivery required,,,,,,,,,,,,,
+0008,order,PO-2024-002,Standard order,,,,,,,,,,,,,,,,,,,,PO-2024-002,Global Parts Inc,2024-01-10,2024-01-24,shipped,8500.00,USD,medium,Standard delivery,,,,,,,,,,,,,
+0009,order,PO-2024-003,Budget order,,,,,,,,,,,,,,,,,,,,PO-2024-003,Budget Suppliers Ltd,2024-01-05,2024-01-26,delivered,3200.00,USD,low,No special requirements,,,,,,,,,,,,,
+0010,logistics,SHIP-001,Express delivery,,,,,,,,,,,,,,,,,,,,,,,,,,,,SHIP-001,FedEx,New York NY,Los Angeles CA,2024-01-20,2024-01-22,in transit,1Z999AA1234567890,125.50,air,Handle with care - electronics
+0011,logistics,SHIP-002,Standard delivery,,,,,,,,,,,,,,,,,,,,,,,,,,,,SHIP-002,UPS,Chicago IL,Seattle WA,2024-01-18,2024-01-25,delivered,1Z888BB9876543210,89.75,ground,Standard handling
+0012,logistics,SHIP-003,International delivery,,,,,,,,,,,,,,,,,,,,,,,,,,,,SHIP-003,DHL,Shanghai China,San Francisco CA,2024-01-12,2024-01-28,delayed,1Z777CC4567890123,245.00,sea,International customs clearance

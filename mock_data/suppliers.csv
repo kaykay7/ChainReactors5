@@ -1,0 +1,4 @@
+ID,Name,Subtitle,Company Name,Category,Location,Certifications,Reliability Score,Contact Info,Products,Delivery Time,Payment Terms,Risk Level
+0001,TechCorp Solutions,Leading electronics supplier,TechCorp Solutions,components,North America,"ISO 9001; FDA Certified",95,contact@techcorp.com,"Microprocessors; Memory chips; Circuit boards",7,Net 30,low
+0002,Global Parts Inc,International component supplier,Global Parts Inc,raw materials,Asia Pacific,"ISO 9001; ISO 14001",78,info@globalparts.com,"Steel; Aluminum; Plastics",14,Net 45,medium
+0003,Budget Suppliers Ltd,Cost-effective supplier,Budget Suppliers Ltd,components,Europe,ISO 9001,45,sales@budgetsuppliers.com,"Basic components; Generic parts",21,Net 60,high
