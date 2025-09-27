@@ -185,79 +185,58 @@ export function CardRenderer(props: {
   }
 
   // Supply Chain Card Types
+
   if (item.type === "supplier") {
     const d = item.data as SupplierData;
     const set = (partial: Partial<SupplierData>) => onUpdateData((prev) => ({ ...(prev as SupplierData), ...partial }));
     return (
       <div className="mt-4 @container">
         <div className="mb-3">
-          <label className="mb-1 block text-xs font-medium text-gray-500">Company Name</label>
+          <label className="mb-1 block text-xs font-medium text-gray-500">Name</label>
           <input
             value={d.field1}
             onChange={(e) => set({ field1: e.target.value })}
             className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
-            placeholder="Supplier company name"
+            placeholder="Supplier name"
+          />
+        </div>
+        <div className="mb-3">
+          <label className="mb-1 block text-xs font-medium text-gray-500">Category</label>
+          <input
+            value={d.field2}
+            onChange={(e) => set({ field2: e.target.value })}
+            className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+            placeholder="e.g. Software Development, Cloud Services"
           />
         </div>
         <div className="contents @xs:grid gap-3 md:grid-cols-2">
           <div className="@max-xs:mb-3">
-            <label className="mb-1 block text-xs font-medium text-gray-500">Category</label>
-            <select
-              value={d.field2}
-              onChange={(e) => set({ field2: e.target.value })}
-              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
-            >
-              <option value="">Select category...</option>
-              {["raw materials", "components", "services", "logistics"].map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-500">Location/Region</label>
-            <input
-              value={d.field3}
-              onChange={(e) => set({ field3: e.target.value })}
-              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
-              placeholder="Location or region"
-            />
-          </div>
-        </div>
-        <div className="contents @xs:grid gap-3 md:grid-cols-2">
-          <div className="@max-xs:mb-3">
-            <label className="mb-1 block text-xs font-medium text-gray-500">Reliability Score (0-100)</label>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Rating (1-5)</label>
             <input
               type="number"
-              min="0"
-              max="100"
-              value={d.field5}
-              onChange={(e) => set({ field5: Number(e.target.value) })}
-              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
-              placeholder="0-100"
+              min="1"
+              max="5"
+              step="0.1"
+              value={d.field3}
+              onChange={(e) => set({ field3: Math.max(1, Math.min(5, Number(e.target.value))) })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+              placeholder="4.5"
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-500">Risk Level</label>
-            <select
-              value={d.field10}
-              onChange={(e) => set({ field10: e.target.value })}
+            <label className="mb-1 block text-xs font-medium text-gray-500">Last Rated Date</label>
+            <input
+              type="date"
+              value={d.field4}
+              onChange={(e) => set({ field4: e.target.value })}
               className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
-            >
-              <option value="">Select risk level...</option>
-              {["low", "medium", "high"].map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
+            />
           </div>
         </div>
-        <div className="mt-3">
-          <label className="mb-1 block text-xs font-medium text-gray-500">Contact Information</label>
-          <input
-            value={d.field6}
-            onChange={(e) => set({ field6: e.target.value })}
-            className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
-            placeholder="Contact email, phone, address"
-          />
+        <div className="mt-4 flex items-center gap-2 text-sm">
+          <span className="text-muted-foreground">Rating:</span>
+          <span className="font-medium">{d.field3}</span>
+          <span className="text-yellow-500">★</span>
         </div>
       </div>
     );
