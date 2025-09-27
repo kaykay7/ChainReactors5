@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { X, Plus } from "lucide-react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Progress } from "@/components/ui/progress";
-import type { ChartData, EntityData, Item, ItemData, NoteData, ProjectData } from "@/lib/canvas/types";
+import type { ChartData, EntityData, Item, ItemData, NoteData, ProjectData, SupplierData, InventoryData, OrderData, LogisticsData } from "@/lib/canvas/types";
 import { chartAddField1Metric, chartRemoveField1Metric, chartSetField1Label, chartSetField1Value, projectAddField4Item, projectRemoveField4Item, projectSetField4ItemDone, projectSetField4ItemText } from "@/lib/canvas/updates";
 
 export function CardRenderer(props: {
@@ -179,6 +179,420 @@ export function CardRenderer(props: {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Supply Chain Card Types
+  if (item.type === "supplier") {
+    const d = item.data as SupplierData;
+    const set = (partial: Partial<SupplierData>) => onUpdateData((prev) => ({ ...(prev as SupplierData), ...partial }));
+    return (
+      <div className="mt-4 @container">
+        <div className="mb-3">
+          <label className="mb-1 block text-xs font-medium text-gray-500">Company Name</label>
+          <input
+            value={d.field1}
+            onChange={(e) => set({ field1: e.target.value })}
+            className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+            placeholder="Supplier company name"
+          />
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-2">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">Category</label>
+            <select
+              value={d.field2}
+              onChange={(e) => set({ field2: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            >
+              <option value="">Select category...</option>
+              {["raw materials", "components", "services", "logistics"].map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Location/Region</label>
+            <input
+              value={d.field3}
+              onChange={(e) => set({ field3: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Location or region"
+            />
+          </div>
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-2">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">Reliability Score (0-100)</label>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              value={d.field5}
+              onChange={(e) => set({ field5: Number(e.target.value) })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="0-100"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Risk Level</label>
+            <select
+              value={d.field10}
+              onChange={(e) => set({ field10: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            >
+              <option value="">Select risk level...</option>
+              {["low", "medium", "high"].map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="mt-3">
+          <label className="mb-1 block text-xs font-medium text-gray-500">Contact Information</label>
+          <input
+            value={d.field6}
+            onChange={(e) => set({ field6: e.target.value })}
+            className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+            placeholder="Contact email, phone, address"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (item.type === "inventory") {
+    const d = item.data as InventoryData;
+    const set = (partial: Partial<InventoryData>) => onUpdateData((prev) => ({ ...(prev as InventoryData), ...partial }));
+    return (
+      <div className="mt-4 @container">
+        <div className="mb-3">
+          <label className="mb-1 block text-xs font-medium text-gray-500">Product Name</label>
+          <input
+            value={d.field1}
+            onChange={(e) => set({ field1: e.target.value })}
+            className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+            placeholder="Product name"
+          />
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-2">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">SKU/Part Number</label>
+            <input
+              value={d.field2}
+              onChange={(e) => set({ field2: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="SKU or part number"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Status</label>
+            <select
+              value={d.field12}
+              onChange={(e) => set({ field12: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            >
+              <option value="">Select status...</option>
+              {["in stock", "low stock", "out of stock", "overstock"].map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-3">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">Current Stock</label>
+            <input
+              type="number"
+              value={d.field3}
+              onChange={(e) => set({ field3: Number(e.target.value) })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Current stock level"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Min Stock</label>
+            <input
+              type="number"
+              value={d.field4}
+              onChange={(e) => set({ field4: Number(e.target.value) })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Minimum stock"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Max Stock</label>
+            <input
+              type="number"
+              value={d.field5}
+              onChange={(e) => set({ field5: Number(e.target.value) })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Maximum stock"
+            />
+          </div>
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-2">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">Unit Cost</label>
+            <input
+              type="number"
+              step="0.01"
+              value={d.field8}
+              onChange={(e) => set({ field8: Number(e.target.value) })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Unit cost"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Lead Time (days)</label>
+            <input
+              type="number"
+              value={d.field11}
+              onChange={(e) => set({ field11: Number(e.target.value) })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Lead time in days"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (item.type === "order") {
+    const d = item.data as OrderData;
+    const set = (partial: Partial<OrderData>) => onUpdateData((prev) => ({ ...(prev as OrderData), ...partial }));
+    return (
+      <div className="mt-4 @container">
+        <div className="mb-3">
+          <label className="mb-1 block text-xs font-medium text-gray-500">Order Number</label>
+          <input
+            value={d.field1}
+            onChange={(e) => set({ field1: e.target.value })}
+            className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+            placeholder="Order number"
+          />
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-2">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">Supplier</label>
+            <input
+              value={d.field2}
+              onChange={(e) => set({ field2: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Supplier name"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Status</label>
+            <select
+              value={d.field5}
+              onChange={(e) => set({ field5: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            >
+              <option value="">Select status...</option>
+              {["pending", "confirmed", "shipped", "delivered", "cancelled", "delayed"].map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-2">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">Order Date</label>
+            <input
+              type="date"
+              value={d.field3}
+              onChange={(e) => set({ field3: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Expected Delivery</label>
+            <input
+              type="date"
+              value={d.field4}
+              onChange={(e) => set({ field4: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            />
+          </div>
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-3">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">Total Amount</label>
+            <input
+              type="number"
+              step="0.01"
+              value={d.field6}
+              onChange={(e) => set({ field6: Number(e.target.value) })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Total amount"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Currency</label>
+            <select
+              value={d.field7}
+              onChange={(e) => set({ field7: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            >
+              <option value="">Select currency...</option>
+              {["USD", "EUR", "GBP", "CAD", "AUD"].map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Priority</label>
+            <select
+              value={d.field9}
+              onChange={(e) => set({ field9: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            >
+              <option value="">Select priority...</option>
+              {["low", "medium", "high", "urgent"].map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="mt-3">
+          <label className="mb-1 block text-xs font-medium text-gray-500">Notes/Special Instructions</label>
+          <TextareaAutosize
+            value={d.field10}
+            onChange={(e) => set({ field10: e.target.value })}
+            placeholder="Special instructions or notes..."
+            className="min-h-20 w-full resize-none rounded-md border bg-white/60 p-3 text-sm leading-6 outline-none placeholder:text-gray-400 transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+            minRows={3}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (item.type === "logistics") {
+    const d = item.data as LogisticsData;
+    const set = (partial: Partial<LogisticsData>) => onUpdateData((prev) => ({ ...(prev as LogisticsData), ...partial }));
+    return (
+      <div className="mt-4 @container">
+        <div className="mb-3">
+          <label className="mb-1 block text-xs font-medium text-gray-500">Shipment ID</label>
+          <input
+            value={d.field1}
+            onChange={(e) => set({ field1: e.target.value })}
+            className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+            placeholder="Shipment ID"
+          />
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-2">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">Carrier/Transport Company</label>
+            <input
+              value={d.field2}
+              onChange={(e) => set({ field2: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Carrier name"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Status</label>
+            <select
+              value={d.field7}
+              onChange={(e) => set({ field7: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            >
+              <option value="">Select status...</option>
+              {["picked up", "in transit", "delivered", "delayed"].map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-2">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">Origin Location</label>
+            <input
+              value={d.field3}
+              onChange={(e) => set({ field3: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Origin location"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Destination Location</label>
+            <input
+              value={d.field4}
+              onChange={(e) => set({ field4: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Destination location"
+            />
+          </div>
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-2">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">Shipping Date</label>
+            <input
+              type="date"
+              value={d.field5}
+              onChange={(e) => set({ field5: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Expected Arrival</label>
+            <input
+              type="date"
+              value={d.field6}
+              onChange={(e) => set({ field6: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            />
+          </div>
+        </div>
+        <div className="contents @xs:grid gap-3 md:grid-cols-3">
+          <div className="@max-xs:mb-3">
+            <label className="mb-1 block text-xs font-medium text-gray-500">Tracking Number</label>
+            <input
+              value={d.field8}
+              onChange={(e) => set({ field8: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Tracking number"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Shipping Cost</label>
+            <input
+              type="number"
+              step="0.01"
+              value={d.field9}
+              onChange={(e) => set({ field9: Number(e.target.value) })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors placeholder:text-gray-400 hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+              placeholder="Shipping cost"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-500">Shipping Method</label>
+            <select
+              value={d.field10}
+              onChange={(e) => set({ field10: e.target.value })}
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent"
+            >
+              <option value="">Select method...</option>
+              {["ground", "air", "sea"].map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="mt-3">
+          <label className="mb-1 block text-xs font-medium text-gray-500">Special Handling Requirements</label>
+          <TextareaAutosize
+            value={d.field11}
+            onChange={(e) => set({ field11: e.target.value })}
+            placeholder="Special handling requirements..."
+            className="min-h-20 w-full resize-none rounded-md border bg-white/60 p-3 text-sm leading-6 outline-none placeholder:text-gray-400 transition-colors hover:ring-1 hover:ring-border focus:ring-2 focus:ring-accent/50 focus:shadow-sm focus:bg-accent/10 focus:text-accent focus:placeholder:text-accent/65"
+            minRows={3}
+          />
         </div>
       </div>
     );

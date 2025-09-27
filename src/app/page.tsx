@@ -18,6 +18,7 @@ import { projectAddField4Item, projectSetField4ItemText, projectSetField4ItemDon
 import useMediaQuery from "@/hooks/use-media-query";
 import ItemHeader from "@/components/canvas/ItemHeader";
 import NewItemMenu from "@/components/canvas/NewItemMenu";
+import SimpleLoadDataButton from "@/components/SimpleLoadDataButton";
 
 export default function CopilotKitPage() {
   const { state, setState } = useCoAgent<AgentState>({
@@ -1398,6 +1399,12 @@ export default function CopilotKitPage() {
                   <div className="mx-auto max-w-lg text-center">
                     <h2 className="text-lg font-semibold text-foreground">Nothing here yet</h2>
                     <p className="mt-2 text-sm text-muted-foreground">Create your first item to get started.</p>
+                    
+                    {/* Load Sample Data Button */}
+                    <div className="mt-6 mb-6">
+                      <SimpleLoadDataButton onLoadData={(data) => setState(data)} />
+                    </div>
+                    
                     <div className="mt-6 flex justify-center">
                       <NewItemMenu onSelect={(t: CardType) => addItem(t)} align="center" className="md:h-10" />
                     </div>

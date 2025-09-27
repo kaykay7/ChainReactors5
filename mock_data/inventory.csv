@@ -1,0 +1,4 @@
+ID,Name,Subtitle,Product Name,SKU,Current Stock,Min Stock,Max Stock,Reorder Point,Unit of Measure,Unit Cost,Supplier,Location,Lead Time,Status
+0001,Product A,High-demand electronics,Product A,ELEC-001,150,50,200,75,units,25.99,TechCorp Solutions,Warehouse A,7,in stock
+0002,Product B,Standard component,Product B,COMP-002,25,30,100,40,units,15.50,Global Parts Inc,Warehouse B,14,low stock
+0003,Product C,Trending product,Product C,TREND-003,0,20,80,25,units,45.00,Budget Suppliers Ltd,Warehouse A,21,out of stock

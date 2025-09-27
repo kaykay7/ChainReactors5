@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Supply Chain Data Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .item-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+        .item-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .item-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        .item-title {
+            font-weight: bold;
+            color: #333;
+        }
+        .item-subtitle {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .item-data {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .data-label {
+            color: #666;
+            font-weight: 500;
+        }
+        .data-value {
+            color: #333;
+            font-weight: 600;
+        }
+        .status-indicator {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        .status-in-stock { background: #d4edda; color: #155724; }
+        .status-low-stock { background: #fff3cd; color: #856404; }
+        .status-out-of-stock { background: #f8d7da; color: #721c24; }
+        .status-confirmed { background: #d1ecf1; color: #0c5460; }
+        .status-shipped { background: #d4edda; color: #155724; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        .status-in-transit { background: #fff3cd; color: #856404; }
+        .status-delayed { background: #f8d7da; color: #721c24; }
+        .risk-low { background: #d4edda; color: #155724; }
+        .risk-medium { background: #fff3cd; color: #856404; }
+        .risk-high { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏭 Supply Chain Management Dashboard</h1>
+        <p>Mock data preview for Supply Chain Optimization Agent</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Suppliers</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Inventory Items</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Active Orders</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Logistics</div>
+        </div>
+    </div>
+
+    <div class="items-grid" id="items-container">
+        <!-- Items will be loaded here -->
+    </div>
+
+    <script>
+        // Mock data (same as in the JSON file)
+        const mockData = {
+            "items": [
+                {
+                    "id": "0001",
+                    "type": "supplier",
+                    "name": "TechCorp Solutions",
+                    "subtitle": "Leading electronics supplier",
+                    "data": {
+                        "field1": "TechCorp Solutions",
+                        "field2": "components",
+                        "field3": "North America",
+                        "field4": ["ISO 9001", "FDA Certified"],
+                        "field5": 95,
+                        "field6": "contact@techcorp.com",
+                        "field7": ["Microprocessors", "Memory chips", "Circuit boards"],
+                        "field8": 7,
+                        "field9": "Net 30",
+                        "field10": "low"
+                    }
+                },
+                {
+                    "id": "0002",
+                    "type": "supplier",
+                    "name": "Global Parts Inc",
+                    "subtitle": "International component supplier",
+                    "data": {
+                        "field1": "Global Parts Inc",
+                        "field2": "raw materials",
+                        "field3": "Asia Pacific",
+                        "field4": ["ISO 9001", "ISO 14001"],
+                        "field5": 78,
+                        "field6": "info@globalparts.com",
+                        "field7": ["Steel", "Aluminum", "Plastics"],
+                        "field8": 14,
+                        "field9": "Net 45",
+                        "field10": "medium"
+                    }
+                },
+                {
+                    "id": "0003",
+                    "type": "supplier",
+                    "name": "Budget Suppliers Ltd",
+                    "subtitle": "Cost-effective supplier",
+                    "data": {
+                        "field1": "Budget Suppliers Ltd",
+                        "field2": "components",
+                        "field3": "Europe",
+                        "field4": ["ISO 9001"],
+                        "field5": 45,
+                        "field6": "sales@budgetsuppliers.com",
+                        "field7": ["Basic components", "Generic parts"],
+                        "field8": 21,
+                        "field9": "Net 60",
+                        "field10": "high"
+                    }
+                },
+                {
+                    "id": "0004",
+                    "type": "inventory",
+                    "name": "Product A",
+                    "subtitle": "High-demand electronics",
+                    "data": {
+                        "field1": "Product A",
+                        "field2": "ELEC-001",
+                        "field3": 150,
+                        "field4": 50,
+                        "field5": 200,
+                        "field6": 75,
+                        "field7": "units",
+                        "field8": 25.99,
+                        "field9": "TechCorp Solutions",
+                        "field10": "Warehouse A",
+                        "field11": 7,
+                        "field12": "in stock"
+                    }
+                },
+                {
+                    "id": "0005",
+                    "type": "inventory",
+                    "name": "Product B",
+                    "subtitle": "Standard component",
+                    "data": {
+                        "field1": "Product B",
+                        "field2": "COMP-002",
+                        "field3": 25,
+                        "field4": 30,
+                        "field5": 100,
+                        "field6": 40,
+                        "field7": "units",
+                        "field8": 15.50,
+                        "field9": "Global Parts Inc",
+                        "field10": "Warehouse B",
+                        "field11": 14,
+                        "field12": "low stock"
+                    }
+                },
+                {
+                    "id": "0006",
+                    "type": "inventory",
+                    "name": "Product C",
+                    "subtitle": "Trending product",
+                    "data": {
+                        "field1": "Product C",
+                        "field2": "TREND-003",
+                        "field3": 0,
+                        "field4": 20,
+                        "field5": 80,
+                        "field6": 25,
+                        "field7": "units",
+                        "field8": 45.00,
+                        "field9": "Budget Suppliers Ltd",
+                        "field10": "Warehouse A",
+                        "field11": 21,
+                        "field12": "out of stock"
+                    }
+                },
+                {
+                    "id": "0007",
+                    "type": "order",
+                    "name": "PO-2024-001",
+                    "subtitle": "Urgent component order",
+                    "data": {
+                        "field1": "PO-2024-001",
+                        "field2": "TechCorp Solutions",
+                        "field3": "2024-01-15",
+                        "field4": "2024-01-22",
+                        "field5": "confirmed",
+                        "field6": 12500.00,
+                        "field7": "USD",
+                        "field8": ["Product A", "Product B"],
+                        "field9": "urgent",
+                        "field10": "Express delivery required"
+                    }
+                },
+                {
+                    "id": "0008",
+                    "type": "order",
+                    "name": "PO-2024-002",
+                    "subtitle": "Standard order",
+                    "data": {
+                        "field1": "PO-2024-002",
+                        "field2": "Global Parts Inc",
+                        "field3": "2024-01-10",
+                        "field4": "2024-01-24",
+                        "field5": "shipped",
+                        "field6": 8500.00,
+                        "field7": "USD",
+                        "field8": ["Product B"],
+                        "field9": "medium",
+                        "field10": "Standard delivery"
+                    }
+                },
+                {
+                    "id": "0009",
+                    "type": "order",
+                    "name": "PO-2024-003",
+                    "subtitle": "Budget order",
+                    "data": {
+                        "field1": "PO-2024-003",
+                        "field2": "Budget Suppliers Ltd",
+                        "field3": "2024-01-05",
+                        "field4": "2024-01-26",
+                        "field5": "delivered",
+                        "field6": 3200.00,
+                        "field7": "USD",
+                        "field8": ["Product C"],
+                        "field9": "low",
+                        "field10": "No special requirements"
+                    }
+                },
+                {
+                    "id": "0010",
+                    "type": "logistics",
+                    "name": "SHIP-001",
+                    "subtitle": "Express delivery",
+                    "data": {
+                        "field1": "SHIP-001",
+                        "field2": "FedEx",
+                        "field3": "New York NY",
+                        "field4": "Los Angeles CA",
+                        "field5": "2024-01-20",
+                        "field6": "2024-01-22",
+                        "field7": "in transit",
+                        "field8": "1Z999AA1234567890",
+                        "field9": 125.50,
+                        "field10": "air",
+                        "field11": "Handle with care - electronics",
+                        "field12": 50
+                    }
+                },
+                {
+                    "id": "0011",
+                    "type": "logistics",
+                    "name": "SHIP-002",
+                    "subtitle": "Standard delivery",
+                    "data": {
+                        "field1": "SHIP-002",
+                        "field2": "UPS",
+                        "field3": "Chicago IL",
+                        "field4": "Seattle WA",
+                        "field5": "2024-01-18",
+                        "field6": "2024-01-25",
+                        "field7": "delivered",
+                        "field8": "1Z888BB9876543210",
+                        "field9": 89.75,
+                        "field10": "ground",
+                        "field11": "Standard handling",
+                        "field12": 25
+                    }
+                },
+                {
+                    "id": "0012",
+                    "type": "logistics",
+                    "name": "SHIP-003",
+                    "subtitle": "International delivery",
+                    "data": {
+                        "field1": "SHIP-003",
+                        "field2": "DHL",
+                        "field3": "Shanghai China",
+                        "field4": "San Francisco CA",
+                        "field5": "2024-01-12",
+                        "field6": "2024-01-28",
+                        "field7": "delayed",
+                        "field8": "1Z777CC4567890123",
+                        "field9": 245.00,
+                        "field10": "sea",
+                        "field11": "International customs clearance",
+                        "field12": 100
+                    }
+                }
+            ]
+        };
+
+        // Icons for different card types
+        const typeIcons = {
+            'supplier': '🏭',
+            'inventory': '📦',
+            'order': '📋',
+            'logistics': '🚚'
+        };
+
+        // Status classes for styling
+        function getStatusClass(type, value) {
+            if (type === 'inventory' && value === 'in stock') return 'status-in-stock';
+            if (type === 'inventory' && value === 'low stock') return 'status-low-stock';
+            if (type === 'inventory' && value === 'out of stock') return 'status-out-of-stock';
+            if (type === 'order' && value === 'confirmed') return 'status-confirmed';
+            if (type === 'order' && value === 'shipped') return 'status-shipped';
+            if (type === 'order' && value === 'delivered') return 'status-delivered';
+            if (type === 'logistics' && value === 'in transit') return 'status-in-transit';
+            if (type === 'logistics' && value === 'delivered') return 'status-delivered';
+            if (type === 'logistics' && value === 'delayed') return 'status-delayed';
+            if (type === 'supplier' && value === 'low') return 'risk-low';
+            if (type === 'supplier' && value === 'medium') return 'risk-medium';
+            if (type === 'supplier' && value === 'high') return 'risk-high';
+            return '';
+        }
+
+        // Render items
+        function renderItems() {
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+
+            mockData.items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                
+                const icon = typeIcons[item.type] || '📄';
+                const data = item.data;
+                
+                let dataHtml = '';
+                if (item.type === 'supplier') {
+                    dataHtml = `
+                        <div class="data-item">
+                            <span class="data-label">Category:</span>
+                            <span class="data-value">${data.field2}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Location:</span>
+                            <span class="data-value">${data.field3}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Reliability:</span>
+                            <span class="data-value">${data.field5}%</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Risk Level:</span>
+                            <span class="data-value status-indicator ${getStatusClass('supplier', data.field10)}">${data.field10}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Delivery Time:</span>
+                            <span class="data-value">${data.field8} days</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Contact:</span>
+                            <span class="data-value">${data.field6}</span>
+                        </div>
+                    `;
+                } else if (item.type === 'inventory') {
+                    dataHtml = `
+                        <div class="data-item">
+                            <span class="data-label">SKU:</span>
+                            <span class="data-value">${data.field2}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Current Stock:</span>
+                            <span class="data-value">${data.field3} ${data.field7}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Status:</span>
+                            <span class="data-value status-indicator ${getStatusClass('inventory', data.field12)}">${data.field12}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Unit Cost:</span>
+                            <span class="data-value">$${data.field8}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Supplier:</span>
+                            <span class="data-value">${data.field9}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Lead Time:</span>
+                            <span class="data-value">${data.field11} days</span>
+                        </div>
+                    `;
+                } else if (item.type === 'order') {
+                    dataHtml = `
+                        <div class="data-item">
+                            <span class="data-label">Supplier:</span>
+                            <span class="data-value">${data.field2}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Status:</span>
+                            <span class="data-value status-indicator ${getStatusClass('order', data.field5)}">${data.field5}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Total Amount:</span>
+                            <span class="data-value">$${data.field6.toLocaleString()} ${data.field7}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Priority:</span>
+                            <span class="data-value">${data.field9}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Order Date:</span>
+                            <span class="data-value">${data.field3}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Expected Delivery:</span>
+                            <span class="data-value">${data.field4}</span>
+                        </div>
+                    `;
+                } else if (item.type === 'logistics') {
+                    dataHtml = `
+                        <div class="data-item">
+                            <span class="data-label">Carrier:</span>
+                            <span class="data-value">${data.field2}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Status:</span>
+                            <span class="data-value status-indicator ${getStatusClass('logistics', data.field7)}">${data.field7}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Route:</span>
+                            <span class="data-value">${data.field3} → ${data.field4}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Tracking:</span>
+                            <span class="data-value">${data.field8}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Cost:</span>
+                            <span class="data-value">$${data.field9}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Method:</span>
+                            <span class="data-value">${data.field10}</span>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="item-header">
+                        <span class="item-icon">${icon}</span>
+                        <div>
+                            <div class="item-title">${item.name}</div>
+                            <div class="item-subtitle">${item.subtitle}</div>
+                        </div>
+                    </div>
+                    <div class="item-data">
+                        ${dataHtml}
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', renderItems);
+    </script>
+</body>
+</html>

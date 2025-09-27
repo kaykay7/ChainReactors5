@@ -1,0 +1,4 @@
+ID,Name,Subtitle,Shipment ID,Carrier,Origin Location,Destination Location,Shipping Date,Expected Arrival,Status,Tracking Number,Shipping Cost,Shipping Method,Special Requirements,Weight/Volume
+0001,SHIP-001,Express delivery,SHIP-001,FedEx,New York NY,Los Angeles CA,2024-01-20,2024-01-22,in transit,1Z999AA1234567890,125.50,air,Handle with care - electronics,50
+0002,SHIP-002,Standard delivery,SHIP-002,UPS,Chicago IL,Seattle WA,2024-01-18,2024-01-25,delivered,1Z888BB9876543210,89.75,ground,Standard handling,25
+0003,SHIP-003,International delivery,SHIP-003,DHL,Shanghai China,San Francisco CA,2024-01-12,2024-01-28,delayed,1Z777CC4567890123,245.00,sea,International customs clearance,100
